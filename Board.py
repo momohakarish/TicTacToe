@@ -5,7 +5,7 @@ class Board:
     EMPTY_CELL = '-'
 
     def __init__(self):
-        self.board = self._get_board()
+        self.board = [[Board.EMPTY_CELL for _ in range(Board.WIDTH)] for _ in range(Board.HEIGHT)]
 
     def __repr__(self):
         board = ''
@@ -13,11 +13,8 @@ class Board:
             board += str(row) + '\n'
         return board
 
-    def set_cell(self, x, y, sign):
-        self.board[y][x] = sign
-
-    def get_cell(self, x, y):
-        return self.board[y][x]
+    def __getitem__(self, index):
+        return self.board[index]
 
     def player_won(self):
         # Check if a row has 3 in a row
@@ -35,13 +32,3 @@ class Board:
         if self.board[2][0] != Board.EMPTY_CELL and self.board[2][0] == self.board[1][1] and self.board[2][0] == self.board[0][2]:
             return True
         return False
-
-    def _get_board(self):
-        board = []
-        for x in range(Board.WIDTH):
-            board.append([])
-            for y in range(Board.HEIGHT):
-                board[x].append(Board.EMPTY_CELL)
-        return board
-
-

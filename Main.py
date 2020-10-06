@@ -2,7 +2,6 @@ import pygame
 import os
 import DrawingFunctions
 from Board import Board
-from Timer import Timer
 
 SCREEN_WIDTH = 900
 SCREEN_HEIGHT = 900
@@ -35,16 +34,16 @@ def on_left_click(pos):
     x = pos[0] // BLOCK_SIZE
     y = pos[1] // BLOCK_SIZE
 
-    if board.get_cell(x, y) != board.EMPTY_CELL:    # If cell already clicked on do nothing
+    if board[y][x] != board.EMPTY_CELL:    # If cell already clicked on do nothing
         return
 
     count += 1      # Incrementing the turn counter
 
     if x_turn:
-        board.set_cell(x, y, X_SIGN)
+        board[y][x] = X_SIGN
         DrawingFunctions.draw_image(screen, 'media/cross.png', (x * BLOCK_SIZE, y * BLOCK_SIZE))
     else:
-        board.set_cell(x, y, O_SIGN)
+        board[y][x] = O_SIGN
         DrawingFunctions.draw_image(screen, 'media/circle.png', (x * BLOCK_SIZE, y * BLOCK_SIZE))
 
 
@@ -94,10 +93,9 @@ def main():
             if count == MAX_NUMBER_OF_TURNS:
                 game_over = True
                 display_draw()
-            if event.type == pygame.MOUSEBUTTONDOWN:  # On mouse click
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == LEFT_CLICK:  # On left mouse click
                 position = pygame.mouse.get_pos()
-                if event.button == LEFT_CLICK:
-                    on_left_click(position)
+                on_left_click(position)
                 if board.player_won():
                     if x_turn:
                         display_win()
@@ -127,8 +125,6 @@ pygame.display.set_icon(icon_surface)
 board = Board()
 DrawingFunctions.draw_board(screen, WHITE, SCREEN_WIDTH, SCREEN_HEIGHT, BLOCK_SIZE, 3)
 
-# Creating our timer
-timer = Timer(screen)
 
 # Setting up the global game variables and loop
 running = True
@@ -137,30 +133,3 @@ game_over = False
 count = 0
 
 main()
-#
-# while running:
-#     clock.tick(FPS)
-#
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             running = False
-#         if game_over:
-#             continue
-#         if count == MAX_NUMBER_OF_TURNS:
-#             game_over = True
-#             display_draw()
-#         if event.type == pygame.MOUSEBUTTONDOWN: # On mouse click
-#             position = pygame.mouse.get_pos()
-#             if event.button == LEFT_CLICK:
-#                 on_left_click(position)
-#             if board.player_won():
-#                 if x_turn:
-#                     display_win()
-#                 else:
-#                     display_win()
-#                 game_over = True
-#             x_turn = not x_turn     # Changing the turn
-#
-#     pygame.display.update()
-
-
